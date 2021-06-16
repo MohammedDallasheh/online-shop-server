@@ -1,0 +1,122 @@
+[
+  {
+    "code": 0,
+    "status": "500",
+    "message": "Error Message Not Found - (code-$code$)."
+  },
+  {
+    "code": 1,
+    "status": "400",
+    "message": "$customMessage$"
+  },
+  {
+    "code": 400,
+    "status": "400",
+    "message": "Invalid Credentials."
+  },
+  {
+    "code": 401,
+    "status": "400",
+    "message": "User Not Active."
+  },
+  {
+    "code": 402,
+    "status": "400",
+    "message": "User Lock - $date$."
+  },
+  {
+    "code": 403,
+    "status": "400",
+    "message": "User already exists."
+  },
+  {
+    "code": 404,
+    "status": "400",
+    "message": "Parameter Miss."
+  },
+  {
+    "code": 405,
+    "status": "404",
+    "message": "item not found."
+  },
+  {
+    "code": 406,
+    "status": "404",
+    "message": "Models Not Found."
+  },
+  {
+    "code": 407,
+    "status": "404",
+    "message": "Permission denied."
+  },
+  {
+    "code": 408,
+    "status": "404",
+    "message": "Payment denied."
+  },
+  {
+    "code": 409,
+    "status": "404",
+    "message": "Product -- $title$ -- out of stock."
+  },
+  {
+    "code": 410,
+    "status": "400",
+    "message": "Parameter Miss:- $parameter$"
+  },
+  {
+    "code": 411,
+    "status": "400",
+    "message": "$item$ already exists"
+  },
+  {
+    "code": 412,
+    "status": "400",
+    "message": "minimum length of $name$ is $number$"
+  },
+  {
+    "code": 413,
+    "status": "400",
+    "message": "$role$ Cannot create order"
+  },
+  {
+    "code": 450,
+    "status": "500",
+    "message": "Token Error."
+  },
+  {
+    "code": 451,
+    "status": "401",
+    "message": "No token, authorization denied."
+  },
+  {
+    "code": 452,
+    "status": "401",
+    "message": "Token is not valid."
+  },
+  {
+    "code": 460,
+    "status": "401",
+    "message": "Review Not Valid."
+  },
+  {
+    "code": 500,
+    "status": "500",
+    "message": "Server Error."
+  },
+  {
+    "code": 600,
+    "status": "500",
+    "message": "Mongoose Error."
+  },
+  {
+    "code": 601,
+    "status": "500",
+    "message": "Mongoose Model Not Found."
+  },
+  {
+    "code": 700,
+    "status": "500",
+    "message": "Internal Server Error"
+  }
+]

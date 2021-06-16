@@ -1,0 +1,7 @@
+[
+  { "id": "Sales", "name": "Sales" },
+  { "id": "Specials", "name": "Specials" },
+  { "id": "Hot", "name": "Hot" },
+  { "id": "Trends", "name": "Trends" },
+  { "id": "New", "name": "New" }
+]
