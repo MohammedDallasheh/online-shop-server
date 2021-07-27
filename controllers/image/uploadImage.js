@@ -1,17 +1,13 @@
-const { createItem, updateItem } = require('../../services/data');
+const { createItem, updateItem } = require("../../services/data");
 
-const {
-  permissionFilter,
-  itemToUpdateGenerator,
-} = require('./imageUtils');
+const { permissionFilter, itemToUpdateGenerator } = require("./imageUtils");
 
 const uploadImageController = async (req, res, next) => {
   try {
     const { _id, role } = req.user;
     const { resource, resourceId, path } = req.params;
 
-    const { buffer, mimetype = 'image/jpg', originalname } =
-      req?.file || {};
+    const { buffer, mimetype = "image/jpg", originalname } = req?.file || {};
 
     if (!buffer) throw 405;
 
@@ -20,12 +16,12 @@ const uploadImageController = async (req, res, next) => {
       name: originalname,
       alt: originalname,
       data: buffer,
-      permission: 'public',
+      permission: "public",
       contentType: mimetype,
     };
 
     const { item: image } = await createItem({
-      resource: 'image',
+      resource: "image",
       itemToCreate: imageToCreate,
     });
     let itemToUpdate = itemToUpdateGenerator(resource, path, {

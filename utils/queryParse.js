@@ -17,6 +17,7 @@ const queryParse = (query, type) => {
             { email: reg },
             { title: reg },
             { description: reg },
+            { address: reg },
           ];
           return prev;
         }
@@ -30,7 +31,7 @@ const queryParse = (query, type) => {
             $lt: +value + 0.9,
           });
           if (Array.isArray(value)) {
-            prev["$or"] ??= [];
+            if (!prev["$or"]) prev["$or"] = [];
             value.forEach((rate) =>
               prev["$or"].push({ rate: rateFilter(rate) })
             );

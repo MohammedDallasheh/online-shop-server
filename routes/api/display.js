@@ -1,35 +1,38 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
-const Display = require('../../models/display');
-const { auth } = require('../../middleware/auth');
-const { queryParse } = require('../../utils/queryParse');
-const { modelSwitch } = require('../../utils/modelSwitch');
+const Display = require("../../models/display");
+const { auth } = require("../../middleware/auth");
+const { queryParse } = require("../../utils/queryParse");
+const { modelSwitch } = require("../../utils/modelSwitch");
 // @route    GET api/display/:filter
 // @desc     Get landingPage cards
 // @access   Public
-router.get('/:filter', async (req, res) => {
+router.get("/:filter", async (req, res) => {
   let { filter } = req.params;
   try {
-    if (filter == 'landingpage')
+    if (filter == "landingpage")
       filter = {
         $in: [
-          'homepageCarousel',
-          'homepageUsers',
-          'homepageCategories',
-          'homepageSales',
+          "homepageCarousel",
+          "homepageUsers",
+          "homepageCategories",
+          "homepageSales",
         ],
       };
     const data = await Display.find({
       name: filter,
     })
-      .populate('items')
+      .populate(
+        "items",
+        "description imgs price rate sold stock tags title user img name title avatar email name phone"
+      )
       .exec();
     const dataToObj = {};
     data.forEach((item) => (dataToObj[`${item.name}`] = item));
     res.json(dataToObj);
   } catch (err) {
-    console.log('Error', err);
+    console.log("Error", err);
     res.json(err);
   }
 });
@@ -37,33 +40,38 @@ router.get('/:filter', async (req, res) => {
 // @route    GET api/display
 // @desc     Get landingPage cards
 // @access   Public
-router.get('/', async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const { filter, range, sort, err } = queryParse(req.query);
-    let { items: docs, _id: id, ...data } = await Display.findOne(
-      filter
-    )
-      .populate('items')
+    let {
+      items: docs,
+      _id: id,
+      ...data
+    } = await Display.findOne(filter)
+      .populate(
+        "items",
+        "description imgs price rate sold stock tags title user img name title avatar email name phone"
+      )
       .lean()
       .exec();
     docs.forEach((doc) => (doc.id = doc._id));
 
     res
-      .header('content-range', `0-${data.length}/${data.length}`)
+      .header("content-range", `0-${data.length}/${data.length}`)
       .json({ ...data, docs, id });
   } catch (err) {
-    console.log('Error', err);
+    console.log("Error", err);
     res.json(err);
   }
 });
 // @route    POST api/display/:name/:itemId
 // @desc     POST adding item to list
 // @access   Public
-router.post('/:name/:id', auth, async (req, res, next) => {
+router.post("/:name/:id", auth, async (req, res, next) => {
   const { role } = req.user;
   const { name, id } = req.params;
   try {
-    if (role !== 'admin') throw 407;
+    if (role !== "admin") throw 407;
     let list = await Display.findOne({ name });
 
     if (!list) throw 405;
@@ -84,7 +92,33 @@ router.post('/:name/:id', auth, async (req, res, next) => {
     await list.save();
 
     res
-      .header('content-range', `0-1/1`)
+      .header("content-range", `0-1/1`)
+      .json({ ...list.toObject(), docs: list.items, id: list._id });
+  } catch (err) {
+    next(err);
+  }
+});
+// @route    POST api/display/:name/:itemId
+// @desc     POST adding item to list
+// @access   Public
+router.put("/:name/reorder", auth, async (req, res, next) => {
+  const { role } = req.user;
+  const { name } = req.params;
+  const { order } = req.body;
+  try {
+    if (role !== "admin") throw 407;
+    let list = await Display.findOne({ name });
+
+    if (!list) throw 405;
+
+    const newItemList = [];
+    order.forEach((index) => newItemList.push(list.items[index]));
+    list.items = newItemList;
+
+    await list.save();
+
+    res
+      .header("content-range", `0-1/1`)
       .json({ ...list.toObject(), docs: list.items, id: list._id });
   } catch (err) {
     next(err);
@@ -93,11 +127,11 @@ router.post('/:name/:id', auth, async (req, res, next) => {
 // @route    DELETE api/display/:filter
 // @desc     DELETE delete item from list
 // @access   Public
-router.delete('/:name/:id', auth, async (req, res, next) => {
+router.delete("/:name/:id", auth, async (req, res, next) => {
   const { role } = req.user;
   const { name, id } = req.params;
   try {
-    if (role !== 'admin') throw 407;
+    if (role !== "admin") throw 407;
     let list = await Display.findOne({ name, items: id });
 
     if (!list) throw 405;
@@ -109,7 +143,7 @@ router.delete('/:name/:id', auth, async (req, res, next) => {
     if (list.items?.length < 2) throw { code: 412, name, number: 2 };
     await list.save();
     res
-      .header('content-range', `0-1/1`)
+      .header("content-range", `0-1/1`)
       .json({ ...list.toObject(), docs: list.items, id: list._id });
   } catch (err) {
     next(err);

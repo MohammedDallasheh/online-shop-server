@@ -1,6 +1,8 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
+const axios = require("axios");
+
 const router = express.Router();
 
 const { modelSwitch } = require("../utils/modelSwitch");
@@ -259,6 +261,61 @@ router.get("/users/add-email-to-name", async (req, res, next) => {
       })
     );
     res.json(users);
+  } catch (err) {
+    next(err);
+  }
+});
+
+const { uploadImage } = require("../controllers/image/uploadImage");
+const user = require("../models/user");
+router.get("/image/test/avatar", async (req, res, next) => {
+  const userId = "60c9ff5b5ec21e15c85cc7bb";
+  const role = "subscriber";
+  try {
+    // const { data } = await axios.get(
+    //   `https://ui-avatars.com/api/?name=${"z"}+${"z"}&size=25x25`,
+    //   { responseType: "arraybuffer" }
+    // );
+    // uploadImage(
+    //   {
+    //     ...req,
+    //     user: { _id: userId, role },
+    //     params: { resource: "user", resourceId: userId, path: "avatar" },
+    //     file: {
+    //       buffer: data,
+    //       mimetype: "image/png",
+    //       originalname: "stam avatar",
+    //     },
+    //   },
+    //   { send: (a) => console.log(a) },
+    //   next
+    // );
+    // return;
+
+    let users = await modelSwitch("user").find();
+
+    users.forEach(async ({ name, _id, role }) => {
+      const { data } = await axios.get(
+        `https://ui-avatars.com/api/?name=${name.first}+${name.last}&size=100x100`,
+        { responseType: "arraybuffer" }
+      );
+      uploadImage(
+        {
+          ...req,
+          user: { _id, role },
+          params: { resource: "user", resourceId: _id, path: "avatar" },
+          file: {
+            buffer: data,
+            mimetype: "image/png",
+            originalname: "stam avatar",
+          },
+        },
+        { send: (a) => null },
+        next
+      );
+    });
+
+    res.json();
   } catch (err) {
     next(err);
   }

@@ -4,6 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
+    "start": "node server",
     "server": "nodemon",
     "inspect": "nodemon --inspect server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -33,11 +34,10 @@
     "passport-facebook": "^3.0.0",
     "passport-google-oauth2": "^0.2.0",
     "passport-jwt": "^4.0.0",
-    "uuid": "^8.3.2"
-  },
-  "devDependencies": {
+    "uuid": "^8.3.2",
     "faker": "^5.5.3",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.7"
-  }
+  },
+  "devDependencies": {}
 }
